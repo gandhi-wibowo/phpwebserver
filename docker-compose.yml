@@ -1,0 +1,39 @@
+version: '2'
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - 8000:80
+    links:
+      - phpfpm
+    volumes:
+      - ./public:/usr/share/nginx/html
+      - ./config/nginx:/etc/nginx/conf.d
+
+  phpfpm:
+    container_name: phpfpm
+    restart: always
+    build:
+      context: ./dockerfile/fpm
+      dockerfile: Dockerfile    
+    depends_on:
+      - mysql
+    ports:
+      - 9000:9000
+    volumes:
+      - ./public:/usr/share/nginx/html
+
+  mysql:
+    container_name: mysql
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: P455W0r7dMy5Ql
+      MYSQL_DATABASE: db_base
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: P455W0r7dMy5Ql
+    ports:
+      - 8001:3306
+
