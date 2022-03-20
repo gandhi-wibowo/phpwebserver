@@ -16,7 +16,7 @@ services:
     container_name: phpfpm
     restart: always
     build:
-      context: ./dockerfile/fpm
+      context: ./config/fpm
       dockerfile: Dockerfile    
     depends_on:
       - mysql
@@ -24,7 +24,6 @@ services:
       - 9000:9000
     volumes:
       - ./public:/usr/share/nginx/html
-      - ./config/php:/usr/local/etc/php/php.ini
 
   mysql:
     container_name: mysql
@@ -32,9 +31,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: P455W0r7dMy5Ql
-      MYSQL_DATABASE: db_base
-      MYSQL_USER: db_user
+      MYSQL_USER: userName
       MYSQL_PASSWORD: P455W0r7dMy5Ql
     ports:
       - 8001:3306
-
+    volumes:
+      - ./mysql:/var/lib/mysql
